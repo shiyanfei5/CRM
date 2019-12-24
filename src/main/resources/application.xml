@@ -2,8 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!--0.注解扫描,对整个包进行扫描    -->
     <context:component-scan base-package="com.yfshi.crm"/>
     <!--1.导入外部文件    -->
@@ -23,14 +28,36 @@
         <!--  配置domain的包（实体类）       -->
         <property name="typeAliasesPackage" value = "com.yfshi.crm.domain"/>
         <!--  配置domain的包（实体类）,其表示匹配        -->
-        <property name="mapperLocations" value = "classpath:"/>
+        <property name="mapperLocations" value = "classpath:com/yfshi/crm/mapper/*Mapper.xml"/>
 
     </bean>
-    <!--4.事务模板    -->
-    <!--5.AOP配置    -->
-    <!--0.注解扫描    -->
-    <!--0.注解扫描    -->
+    <!--4.事务管理器    -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!--5.事务模板    -->
+    <tx:advice id="advice">
+        <tx:attributes>
+            <!--设置所有读操作的事务为SUPPORRS，如果没有事务就不开启新事务-->
+            <tx:method name="get*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="select*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="query*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="list*" read-only="true" propagation="SUPPORTS"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
 
+
+    <!--5.AOP配置    -->
+    <aop:config>
+        <aop:pointcut id="pointCut" expression="execution(* com.yfshi.crm.service.*.*(..))"/>
+        <aop:advisor advice-ref="advice" pointcut-ref="pointCut"/>
+    </aop:config>
+    <!--6.Mapper注解扫描    -->
+    <!-- mapper接口的扫描器：这里指定了某个包下的java文件都是mapper。如果是注解方式，它是全路径扫描，但是只认@Mapper-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com._520it.crm.mapper"/>
+    </bean>
 
 
 
