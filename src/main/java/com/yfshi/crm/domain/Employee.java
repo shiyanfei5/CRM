@@ -15,7 +15,7 @@ public class Employee {
 
     private String email;
 
-    private Department deptId;
+    private Department dept;
 
     private Date inputtime;
 
@@ -71,12 +71,12 @@ public class Employee {
         this.email = email == null ? null : email.trim();
     }
 
-    public Department getDeptId() {
-        return deptId;
+    public Department getDept() {
+        return dept;
     }
 
-    public void setDeptId(Department deptId) {
-        this.deptId = deptId;
+    public void setDept(Department deptId) {
+        this.dept = deptId;
     }
 
     public Date getInputtime() {

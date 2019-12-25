@@ -27,7 +27,7 @@
         <property name="configLocation" value = "mybatis.cfg.xml"/>
         <!--  配置domain的包（实体类）       -->
         <property name="typeAliasesPackage" value = "com.yfshi.crm.domain"/>
-        <!--  配置domain的包（实体类）,其表示匹配        -->
+        <!--  mapper映射文件        -->
         <property name="mapperLocations" value = "classpath:com/yfshi/crm/mapper/*Mapper.xml"/>
 
     </bean>
@@ -53,10 +53,11 @@
         <aop:pointcut id="pointCut" expression="execution(* com.yfshi.crm.service.*.*(..))"/>
         <aop:advisor advice-ref="advice" pointcut-ref="pointCut"/>
     </aop:config>
+
     <!--6.Mapper注解扫描    -->
     <!-- mapper接口的扫描器：这里指定了某个包下的java文件都是mapper。如果是注解方式，它是全路径扫描，但是只认@Mapper-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com._520it.crm.mapper"/>
+        <property name="basePackage" value="com.yfshi.crm.mapper"/>
     </bean>
 
 

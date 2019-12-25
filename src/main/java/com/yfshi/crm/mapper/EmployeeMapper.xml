@@ -8,11 +8,23 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="dept_id" property="deptId" jdbcType="BIGINT" />
     <result column="inputtime" property="inputtime" jdbcType="DATE" />
     <result column="state" property="state" jdbcType="BIT" />
     <result column="admin" property="admin" jdbcType="BIT" />
+    <association property="dept" javaType="com.yfshi.crm.domain.Department"
+                 columnPrefix="dept_" >
+      <id column="id" property="id" />
+      <result column="name" property="name" />
+    </association>
   </resultMap>
+  <sql id = "fieldSql">
+    e.id, e.username, e.realname, e.password, e.tel, e.email, e.inputtime, e.state, e.admin,
+    d.id as dept_id, d.name as dept_name
+  </sql>
+  <sql id = "conditionSql">
+
+  </sql>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from employee
     where id = #{id,jdbcType=BIGINT}
@@ -22,7 +34,7 @@
       tel, email, dept_id, 
       inputtime, state, admin)
     values (#{username,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{deptId,jdbcType=BIGINT}, 
+      #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{dept.id,jdbcType=BIGINT},
       #{inputtime,jdbcType=DATE}, #{state,jdbcType=BIT}, #{admin,jdbcType=BIT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.yfshi.crm.domain.Employee" >
@@ -32,19 +44,35 @@
       password = #{password,jdbcType=VARCHAR},
       tel = #{tel,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
-      dept_id = #{deptId,jdbcType=BIGINT},
+      dept_id = #{dept.id,jdbcType=BIGINT},
       inputtime = #{inputtime,jdbcType=DATE},
       state = #{state,jdbcType=BIT},
       admin = #{admin,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, username, realname, password, tel, email, dept_id, inputtime, state, admin
-    from employee
+    select  <include refid="fieldSql"/>
+    from employee e left join department d on d.id = e.dept_id
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, username, realname, password, tel, email, dept_id, inputtime, state, admin
+    select<include refid="fieldSql"/>
     from employee
   </select>
+  
+  <select id="queryByConditionCount">
+    select count(*) from employee e <include refid="conditionSql"/>
+  </select>
+  <select id="queryByCondition" resultMap="BaseResultMap">
+    select <include refid="fieldSql"/>
+    from employee e left join department d on d.id = e.dept_id
+    <include refid="conditionSql"/>
+    <if test="page!=null and page!=''">
+        limit #{start},#{rows}
+    </if>
+
+
+  </select>
+
+
 </mapper>
