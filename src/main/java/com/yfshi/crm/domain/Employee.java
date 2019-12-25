@@ -15,7 +15,7 @@ public class Employee {
 
     private String email;
 
-    private Long deptId;
+    private Department deptId;
 
     private Date inputtime;
 
@@ -71,11 +71,11 @@ public class Employee {
         this.email = email == null ? null : email.trim();
     }
 
-    public Long getDeptId() {
+    public Department getDeptId() {
         return deptId;
     }
 
-    public void setDeptId(Long deptId) {
+    public void setDeptId(Department deptId) {
         this.deptId = deptId;
     }
 

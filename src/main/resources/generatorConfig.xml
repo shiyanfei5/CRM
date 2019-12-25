@@ -82,7 +82,7 @@
 				value=""/> -->
 		</javaClientGenerator>
 
-		<table tableName="employee">
+		<table tableName="department">
 			<!-- 参考 javaModelGenerator 的 constructorBased属性 -->
 			<property name="constructorBased" value="false" />
 			<!--	生成键，-->
