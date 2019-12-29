@@ -2,7 +2,7 @@ package com.yfshi.crm.service.impl;
 
 import com.yfshi.crm.domain.Employee;
 import com.yfshi.crm.mapper.EmployeeMapper;
-import com.yfshi.crm.query.PageResult;
+import com.yfshi.crm.page.PageResult;
 import com.yfshi.crm.query.QueryObject;
 import com.yfshi.crm.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;

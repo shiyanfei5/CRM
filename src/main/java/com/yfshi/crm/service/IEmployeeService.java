@@ -1,9 +1,8 @@
 package com.yfshi.crm.service;
 
 import com.yfshi.crm.domain.Employee;
-import com.yfshi.crm.query.PageResult;
+import com.yfshi.crm.page.PageResult;
 import com.yfshi.crm.query.QueryObject;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
